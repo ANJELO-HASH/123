@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .calendar {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .day {
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+        }
+        .date {
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .date:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <div class="header">
+            <button onclick="prevMonth()">&#9665;</button>
+            <h2 id="monthYear"></h2>
+            <button onclick="nextMonth()">&#9655;</button>
+        </div>
+        <div class="days">
+            <div class="day">Sun</div>
+            <div class="day">Mon</div>
+            <div class="day">Tue</div>
+            <div class="day">Wed</div>
+            <div class="day">Thu</div>
+            <div class="day">Fri</div>
+            <div class="day">Sat</div>
+        </div>
+        <div class="days" id="dates"></div>
+    </div>
+    
+    <script>
+        let currentDate = new Date();
+
+        function renderCalendar() {
+            const monthYear = document.getElementById('monthYear');
+            const dates = document.getElementById('dates');
+            dates.innerHTML = '';
+            
+            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear();
+            monthYear.textContent = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDate);
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                dates.appendChild(emptyDiv);
+            }
+            
+            for (let day = 1; day <= totalDays; day++) {
+                const dateDiv = document.createElement('div');
+                dateDiv.classList.add('date');
+                dateDiv.textContent = day;
+                dates.appendChild(dateDiv);
+            }
+        }
+        
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+        
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+        
+        renderCalendar();
+    </script>
+</body>
+</html>
